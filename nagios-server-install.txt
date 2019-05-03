@@ -30,13 +30,20 @@ http://172.30.3.77/nagios
 
 ------------------------- Add Host to Nagios server  ----------------
 
-sudo vi /usr/local/nagios/etc/servers/yourhost.cfg
+sudo vi /etc/nagios/nagios.cfg
+
+# SAdd to nagios cfg file:
+cfg_dir=/etc/nagios/servers
+
+mkdir /etc/nagios/servers
+
+sudo vi /etc/nagios/servers/webapp1.cfg
 
 define host {
         use                             linux-server
-        host_name                       yourhost
+        host_name                       webapp1
         alias                           My first Apache server
-        address                         10.132.234.52
+        address                         172.30.3.103
         max_check_attempts              5
         check_period                    24x7
         notification_interval           30
@@ -45,19 +52,17 @@ define host {
 
 define service {
         use                             generic-service
-        host_name                       yourhost
+        host_name                       webapp1
         service_description             PING
         check_command                   check_ping!100.0,20%!500.0,60%
 }
 
 define service {
         use                             generic-service
-        host_name                       yourhost
+        host_name                       webapp1
         service_description             SSH
         check_command                   check_ssh
         notifications_enabled           0
 }
 
 sudo systemctl reload nagios.service
-
--------------------------------------------------------------------------------------
